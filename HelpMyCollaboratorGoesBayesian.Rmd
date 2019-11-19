@@ -17,7 +17,9 @@ authornote: |
 abstract: |
   
   
-  This paper introduces researchers to a Bayesian approach to statistical analyses. Starting with the problems of null hypothesis significance testing, it outlines some fundamental advantages of a Bayesian statistical analysis. Two types of Bayesian approaches are illustrated using two different software packages: JASP and the R package `rstanarm`. The R Markdown document can be downloaded from https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.Rmd. The PDF version is available at https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.pdf.
+  This paper introduces researchers to a Bayesian approach to statistical analyses. Starting with the problems of null hypothesis significance testing, it outlines some fundamental advantages of a Bayesian statistical analysis. Two types of Bayesian approaches are illustrated using two different software packages: JASP and the R package `rstanarm`. The R Markdown document containing this paper can be downloaded from https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.Rmd. The PDF version is available at https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.pdf.
+  
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
   
   <!-- https://tinyurl.com/ybremelq -->
 keywords          : "R; problems null hypothesis significance testing; Bayesian statistical analysis;"
