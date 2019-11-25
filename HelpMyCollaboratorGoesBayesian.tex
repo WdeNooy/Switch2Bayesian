@@ -1,5 +1,4 @@
 \documentclass[doc]{apa6}
-\usepackage{wrapfig}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -113,7 +112,7 @@ Analysis}
 \shorttitle{Help, My Collaborator Goes Bayesian!}
 \affiliation{
 \vspace{0.5cm}
-\textsuperscript{1} Amsterdam School of Communication Research ASCor\\\textsuperscript{2} University of Amsterdam}
+\textsuperscript{1} Amsterdam School of Communication Research ASCor}
 \keywords{R; problems null hypothesis significance testing; Bayesian statistical analysis;\newline\indent Word count: 6755}
 \usepackage{csquotes}
 \usepackage{upgreek}
@@ -137,6 +136,7 @@ Analysis}
 
 \geometry{a4paper, top=30mm, bottom = 25mm, asymmetric = FALSE}
 \usepackage{float}
+\usepackage{wrapfig}
 
 \authornote{Wouter de Nooy, Department of Communication
 Science, University of Amsterdam.
@@ -149,9 +149,17 @@ Nooy, Nieuwe Achtergracht 166, 1018 WV Amsterdam. E-mail:
 This paper introduces researchers to a Bayesian approach to statistical
 analyses. Starting with the problems of null hypothesis significance
 testing, it outlines some fundamental advantages of a Bayesian
-statistical analysis. Two types of Bayesian approaches are illustrated
-using two different software packages: JASP and the R package
-\texttt{rstanarm}.
+statistical analysis: intuitive probabilities, no rigid assumptions
+about the data, better estimation of complicated models, and better
+precautions against overfitting. Two types of Bayesian approaches are
+illustrated using two different software packages: JASP and the R
+package \texttt{rstanarm}. The R Markdown document containing this paper
+can be downloaded from
+\url{https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.Rmd}.
+The PDF version is available at
+\url{https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.pdf}.
+This work is licensed under a Creative Commons Attribution-ShareAlike
+4.0 International License.
 
 
 }
@@ -191,8 +199,7 @@ with a large effect from a population with a very small effect or the
 other way around. In addition, a larger sample yields statistically
 significant results more easily than a smaller sample. Very small
 effects can be statistically significant in very large samples, whereas
-large effects can be statistically non-significant in a very small
-sample.
+large effects can be statistically insignificant in a very small sample.
 
 It is a common mistake to interpret statistical significance as an
 indication that an effect is substantial or substantively interesting.
@@ -305,10 +312,9 @@ population.}
 In the example of a regression coefficient estimating the effect of
 campaign exposure, a Bayesian analysis gives us a probability
 distribution of the effect in the population. Practically speaking, we
-obtain a long list of regression coefficient estimates, which is similar
-to a bootstrapped distribution. Usually, the median value (vertical line
-in Figure \ref{fig:posteriorexample}) of this distribution is used as
-the point estimate.
+obtain a long list of regression coefficient estimates. Usually, the
+median value (vertical line in Figure \ref{fig:posteriorexample}) of
+this distribution is used as the point estimate.
 
 The point estimate is a very poor summary of the distribution. The
 probabilities implied by the distribution are more interesting. The
@@ -319,9 +325,10 @@ one-sided hypothesis that the effect is positive. We can actually
 conclude that the probability of a positive effect in the population is
 98 per cent in this example. In contrast, a significance test of the
 null hypothesis that the effect is not negative only allows us to
-conclude that our sample is very likely \emph{if the null hypothesis is
-true}. We cannot reject the null hypothesis but we don't know the
-probability of a positive effect in the population.
+conclude that our sample is very likely or very unlikely \emph{if the
+null hypothesis is true}. We can or cannot reject the null hypothesis
+but we don't know the probability of a positive effect in the
+population.
 
 A probability distribution of the regression coefficient in the
 population helps us to understand that it does not make sense to focus
@@ -381,9 +388,11 @@ to specify a probability distribution for each population value that is
 to be estimated. This probability distribution is called the \emph{prior
 distribution}. The sample data update the prior distribution into the
 \emph{posterior distribution}, which is the probability distribution
-that the researcher interprets and reports. A Bayesian approach, then,
-comes with a different type of distributional assumptions, namely the
-choice of prior distributions.
+that the researcher interprets and reports. Thus, Bayesian estimation
+learns from the data whereas a frequentist approach does not. But we
+have to provide prior distributions as a starting point for the learning
+process. A Bayesian approach then, comes with a different type of
+distributional assumptions, namely the choice of prior distributions.
 
 How do we chose prior distributions? In the ideal case, the posterior
 distributions of previous research can be used as prior distributions in
@@ -414,8 +423,17 @@ if you change the prior settings (robustness check). For guidelines, see
 Depaoli and van de Schoot
 (\protect\hyperlink{ref-depaoliImprovingTransparencyReplication2017}{2017}){]},
 who recommend to compare with a model estimated from \emph{uninformative
-prior distributions}, which more or less give equal prior probabilities
-to all possible values of the statistic in the population.
+prior distributions}, which gives equal prior probabilities to all
+possible values of the statistic in the population (Figure
+\ref{fig:uninformativeprior}).
+
+\begin{figure}
+\centering
+\includegraphics{HelpMyCollaboratorGoesBayesian_files/figure-latex/uninformativeprior-1.pdf}
+\caption{\label{fig:uninformativeprior}An uninformative prior (horizontal
+line), a weakly informative prior (t distribution with heavy tails), and
+the posterior distribution (histogram).}
+\end{figure}
 
 In addition, a Bayesian approach requires another type of check. The
 posterior distribution is usually estimated with an iterative (MCMC)
@@ -463,14 +481,14 @@ impossible or highly unlikely, so we specify a weakly informative prior
 distribution. Why would we want to take quite superficial prior
 knowledge as our starting point?
 
-A very practical reason for including this knowledge is that it helps
-the estimation algorithm. The prior information nudges the estimation
-algorithm in a plausible direction---even if it is not necessarily the
-right direction---so estimation will converge more easily and more
-quickly. For relatively simple models, this nudge hardly makes a
-difference, but complicated models, such as multilevel models with
-random intercepts and random slopes, can sometimes only be estimated
-with the help of these nudges.
+A very practical reason for including even superficial prior knowledge
+is that it helps the estimation algorithm. The prior information nudges
+the estimation algorithm in a plausible direction---even if it is not
+necessarily the right direction---so estimation will converge more
+easily and more quickly. For relatively simple models, this nudge hardly
+makes a difference, but complicated models, such as multilevel models
+with random intercepts and random slopes, can sometimes only be
+estimated with this kind of help.
 
 \subsection{Precautions against overfitting the sample
 data}\label{precautions-against-overfitting-the-sample-data}
@@ -496,7 +514,7 @@ however, are more realistic because empirical reality tends to be
 complex. We end up with a conundrum, which is known as the bias-variance
 trade-off (James, Witten, Hastie, \& Tibshirani,
 \protect\hyperlink{ref-JamesIntroductionStatisticalLearning2017}{2017}:
-34-5): We value realistic, hence complex models (little bias) but we
+34-5). We value realistic, hence complex models (little bias) but we
 also value replication, which is compromised by overfitting the model to
 the current sample (variance).
 
@@ -521,8 +539,8 @@ want to ignore half of the information when fitting and validating the
 model, resampling techniques can be used. These techniques repeatedly
 sample from the original sample and fit the model to each new sample
 (cross-validation), for instance, leave one randomly chosen observation
-out or leave out a randomly selected subset of observations (k-fold
-cross-validation) (Efron \& Hastie,
+out (leave-one-out cross-validation) or leave out a randomly selected
+subset of observations (k-fold cross-validation) (Efron \& Hastie,
 \protect\hyperlink{ref-efronComputerAgeStatistical2016}{2016}: 213ff).
 
 A Bayesian approach estimates a probability distribution (posterior) for
@@ -536,8 +554,10 @@ approach, some of which are briefly discussed in the next section.
 \section{How Can I Use A Bayesian Approach?}\label{usebayesian}
 
 Statistical software for Bayesian analysis is increasingly available.
-For example, Bayesian alternatives to many types of statistical models
-are available as R packages; consult the task view
+Recent versions of SPSS offer Bayesian analyses (\emph{Bayesian
+Statistics} in the \emph{Analyze} menu). Bayesian alternatives to many
+types of statistical models are available as R packages; consult the
+task view
 \href{https://cran.r-project.org/web/views/Bayesian.html}{Bayesian} or
 search for \enquote{Bayes} in other
 \href{https://cran.r-project.org/web/views/}{task views}.
@@ -590,13 +610,14 @@ regression but not for regression models with dichotomous or categorical
 predictors (although the beta-version \emph{BAIN} module can compare
 models with categorical predictors). Finally, binomial and multinomial
 tests, contingency tables, and log-linear models can be executed in a
-Bayesian way.
+Bayesian way. This is basically the range of models for which SPSS also
+offers Bayesian analyses.
 
 JASP's Bayesian approach focuses on \emph{Bayes factors}. A Bayes factor
 quantifies the support in the sample for one model in comparison to
 another model. The more a model is supported rather than the other
 model, the more evidence we have for the former model. Model comparison
-with Bayse factors takes into account the model complexity as a guard
+with Bayes factors takes into account the model complexity as a guard
 against overfitting the model to the sample data (Kass \& Raftery,
 \protect\hyperlink{ref-kassBayesFactors1995}{1995}). Rules of thumb have
 been developed for interpreting Bayes factor values as strength of the
@@ -658,8 +679,8 @@ running the same regression model in a frequentist approach. But yes,
 you have to work with R.
 
 Let us illustrate how to apply Bayesian regression models using
-\texttt{rstanarm}. Consult (Muth, Oravecz, \& Gabry,
-\protect\hyperlink{ref-TQMP14-2-99}{2018}) for a more detailed
+\texttt{rstanarm}. Consult Muth et al.
+(\protect\hyperlink{ref-TQMP14-2-99}{2018}) for a more detailed
 step-by-step tutorial. Our example data concern students in a US
 dormitory (Madan, Cebrian, Lazer, \& Pentland,
 \protect\hyperlink{ref-MadanSocialsensingepidemiological2010}{2010}),
@@ -967,7 +988,7 @@ Table \ref{tab:jointposterior} shows a small part of this list.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}[H]
+\begin{table}
 
 \caption{\label{tab:jointposterior}The estimated fixed effects for the first five entries 
       in the joint posterior distribution of the model with random slopes 
@@ -992,9 +1013,11 @@ The posterior distribution of a parameter is just the column of this
 parameter in the list described above. The results presented by
 \texttt{shinystan} (Section \ref{checks}) calculate the median (or mean)
 as point estimate and the 2.5 and 97.5 percentiles as limits of the
-credible interval. It is easy to calculate the probability that a
-regression coefficient is larger than a particular value, for example,
-that the effect of mediated exposure to sad friends is larger than zero:
+credible interval. It is easy to test any hypothesis with the posterior
+distribution: Just calculate the probability that a regression
+coefficient is larger than a particular value or within a particulare
+range. The probability that the effect of mediated exposure to sad
+friends is larger than zero, for example, is calculated thus:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1049,7 +1072,7 @@ via spatial proximity for advanced-level students. Note that the plot
 shows regression lines for an average student, not taking into account
 variation across students modeled by random intercepts and slopes.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics{HelpMyCollaboratorGoesBayesian_files/figure-latex/regressionplot-1.pdf}
 \caption{\label{fig:regressionplot}The median regression line (dark blue)
@@ -1084,9 +1107,9 @@ Wagenmakers \& Farrell,
 
 This approach to model comparison, then, uses information criteria
 rather than Bayes factors. A well-known information criterion is
-Akaike's Information Criterion (AIC) (Hirotuge Akaike,
+Akaike's Information Criterion (AIC) (Akaike,
 \protect\hyperlink{ref-AkaikeInformationtheoryextension1973}{1973};
-Hirotugu Akaike,
+Akaike,
 \protect\hyperlink{ref-akaikeNewLookStatistical1974}{1974}). In Bayesian
 analysis, however, other information criteria are preferred because they
 make no distributional assumptions like AIC. Examples are the Widely
@@ -1127,7 +1150,7 @@ criterion for the three models predicting sadness introduced above.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}[H]
+\begin{table}
 
 \caption{\label{tab:modelcomparison1}Three models arranged in descending order of predictive accuracy according to the approximate leave-one-out cross-validation information criterion (LOOIC).}
 \centering
@@ -1164,20 +1187,11 @@ student-level predictors performs slightly worse (predictive accuracy
 difference is -1.60), and the model without varying slopes and
 student-level predictors performs worst (-2.60).
 
-The sizes of the differences, however, are hard to interpret. If we want
-to make sense of them, we should evaluate them in relation to the
-standard errors of the predictive accuracy (se\_elpd\_loo). In this
-example, the predictive accuracy differences are small in comparison to
-the standard error of the predictive accuracy, so our uncertainty about
-the predictive accuracy is much larger than the differences between the
-models. Based on this information, no model clearly stands out as a
-better or worse model.
-
-\begin{wraptable}{r}{0.6\textwidth}
+\begin{wraptable}{r}{8cm}
 
 \caption{\label{tab:modelcomparison2}Model weights for predictive accuracy according to the approximate leave-one-out cross-validation information criterion (LOOIC) with stacking.}
 \centering
-\fontsize{8}{10}\selectfont
+\fontsize{12}{14}\selectfont
 \begin{tabular}[t]{lr}
 \toprule
 Model & Weight\\
@@ -1188,6 +1202,15 @@ Plus student-level predictors & 0.82\\
 \bottomrule
 \end{tabular}
 \end{wraptable}
+
+The sizes of the differences, however, are hard to interpret. If we want
+to make sense of them, we should evaluate them in relation to the
+standard errors of the predictive accuracy (se\_elpd\_loo). In this
+example, the predictive accuracy differences are small in comparison to
+the standard error of the predictive accuracy, so our uncertainty about
+the predictive accuracy is much larger than the differences between the
+models. Based on this information, no model clearly stands out as a
+better or worse model.
 
 Table \ref{tab:modelcomparison2} shows the weights for the three models
 (Yao, Vehtari, Simpson, \& Gelman,
@@ -1209,7 +1232,7 @@ predictions in a model ensemble (model weight is 0.00).
 \section{Conclusion}\label{conclusion}
 
 Bayesian analyses are flexible and they provide results that are
-intuitive.
+intuitive and helpful. What else needs to be said?
 
 \newpage
 

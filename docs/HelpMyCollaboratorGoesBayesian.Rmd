@@ -10,15 +10,15 @@ author:
 affiliation:
   - id            : "1"
     institution   : "Amsterdam School of Communication Research ASCor"
-  - id            : "2"
-    institution   : "University of Amsterdam"
 authornote: |
   Wouter de Nooy, Department of Communication Science, University of Amsterdam.
 abstract: |
   
   
-  This paper introduces researchers to a Bayesian approach to statistical analyses. Starting with the problems of null hypothesis significance testing, it outlines some fundamental advantages of a Bayesian statistical analysis. Two types of Bayesian approaches are illustrated using two different software packages: JASP and the R package `rstanarm`. The R Markdown document can be downloaded from https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.Rmd. The PDF version is available at https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.pdf.
   
+  
+  This paper introduces researchers to a Bayesian approach to statistical analyses. Starting with the problems of null hypothesis significance testing, it outlines some fundamental advantages of a Bayesian statistical analysis: intuitive probabilities, no rigid assumptions about the data, better estimation of complicated models, and better precautions against overfitting. Two types of Bayesian approaches are illustrated using two different software packages: JASP and the R package `rstanarm`. The R Markdown document containing this paper can be downloaded from https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.Rmd. The PDF version is available at https://wdenooy.github.io/Switch2Bayesian/HelpMyCollaboratorGoesBayesian.pdf.
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
   <!-- https://tinyurl.com/ybremelq -->
 keywords          : "R; problems null hypothesis significance testing; Bayesian statistical analysis;"
 wordcount         : 6755
@@ -34,13 +34,13 @@ draft             : no
 documentclass     : "apa6"
 classoption       : "doc" #Other options: "jou" (journal format), "man" (manuscript format)
 output            : 
+  papaja::apa6_pdf: 
+    toc: no         #no table of contents
+    number_sections: true #number sections (for referencing)
   bookdown::html_document2: #additional HTML output option
     toc: yes        #with a table of contents
     toc_depth: 3    #using three levels
     toc_float: yes  #which is situated in the left margin
-  papaja::apa6_pdf: 
-    toc: no         #no table of contents
-    number_sections: true #number sections (for referencing)
   papaja::apa6_word:
     toc: no         #no table of contents
 geometry: 
@@ -52,6 +52,7 @@ geometry:
   # right=30mm
 header-includes: 
 - \usepackage{float} #position of tables and figures
+- \usepackage{wrapfig} #wrap text around figures or tables
 ---
 
 ```{r setup, include = FALSE, echo=FALSE}
@@ -92,7 +93,7 @@ Imagine that you have executed a regression analysis and one of the regression c
 
 Why test a two-sided null hypothesis if we know that it is wrong? What information do we gain if we reject a null hypothesis that is nearly sure to be wrong? It is silly. From this perspective, it makes more sense to test _one-sided null hypotheses_. If we hypothesize that an effect can only be positive, for example, the null hypothesis of no effect or a negative effect can actually be true. In this case, we can fail to reject the null hypothesis without making a Type II error. Unfortunately, one-sided tests are unpopular in the field.
 
-In a one-sided or two-sided test, can we conclude that the effect in the population is more different from zero, that is, stronger, for a rejected false null hypothesis than for a false null hypothesis that is not rejected? No, we can't for several reasons. Our sample can be more or less representative of the population: We may have drawn a sample with a large effect from a population with a very small effect or the other way around. In addition, a larger sample yields statistically significant results more easily than a smaller sample. Very small effects can be statistically significant in very large samples, whereas large effects can be statistically non-significant in a very small sample.
+In a one-sided or two-sided test, can we conclude that the effect in the population is more different from zero, that is, stronger, for a rejected false null hypothesis than for a false null hypothesis that is not rejected? No, we can't for several reasons. Our sample can be more or less representative of the population: We may have drawn a sample with a large effect from a population with a very small effect or the other way around. In addition, a larger sample yields statistically significant results more easily than a smaller sample. Very small effects can be statistically significant in very large samples, whereas large effects can be statistically insignificant in a very small sample.
 
 It is a common mistake to interpret statistical significance as an indication that an effect is substantial or substantively interesting. This mistake was noted early on [for example, by @tylerWhatStatisticalSignificance1931]. The book _Understanding the New Statistics_ [@CummingUnderstandingnewstatistics2012] offers a lucid discussion of this mistake. The binary decision associated with a null hypothesis significance test incorrectly suggests a qualitative difference between a statistically significant effect and an effect that is not statistically significant.
 
@@ -143,9 +144,9 @@ ggplot(regcoef) +
   theme_bw()
 ```
 
-In the example of a regression coefficient estimating the effect of campaign exposure, a Bayesian analysis gives us a probability distribution of the effect in the population. Practically speaking, we obtain a long list of regression coefficient estimates, which is similar to a bootstrapped distribution. Usually, the median value (vertical line in Figure \@ref(fig:posteriorexample)) of this distribution is used as the point estimate.
+In the example of a regression coefficient estimating the effect of campaign exposure, a Bayesian analysis gives us a probability distribution of the effect in the population. Practically speaking, we obtain a long list of regression coefficient estimates. Usually, the median value (vertical line in Figure \@ref(fig:posteriorexample)) of this distribution is used as the point estimate.
 
-The point estimate is a very poor summary of the distribution. The probabilities implied by the distribution are more interesting. The proportion of the estimates that are above zero, for example, can be interpreted as the probability that the effect is positive in the population. If you like, you can use this probability to test the one-sided hypothesis that the effect is positive. We can actually conclude that the probability of a positive effect in the population is `r 100 * round(mean(regcoef$estimate > 0), 2)` per cent in this example. In contrast, a significance test of the null hypothesis that the effect is not negative only allows us to conclude that our sample is very likely _if the null hypothesis is true_. We cannot reject the null hypothesis but we don't know the probability of a positive effect in the population.
+The point estimate is a very poor summary of the distribution. The probabilities implied by the distribution are more interesting. The proportion of the estimates that are above zero, for example, can be interpreted as the probability that the effect is positive in the population. If you like, you can use this probability to test the one-sided hypothesis that the effect is positive. We can actually conclude that the probability of a positive effect in the population is `r 100 * round(mean(regcoef$estimate > 0), 2)` per cent in this example. In contrast, a significance test of the null hypothesis that the effect is not negative only allows us to conclude that our sample is very likely or very unlikely _if the null hypothesis is true_. We can or cannot reject the null hypothesis but we don't know the probability of a positive effect in the population.
 
 A probability distribution of the regression coefficient in the population helps us to understand that it does not make sense to focus on one value as in a two-sided null hypothesis significance test. In theory, a regression coefficient, like most statistics, can have an infinite number of decimal places. The probability of one exact value such as 0.000000000000000000000(...and so on) must be close to zero. In other words, this one value is highly improbable. We know that beforehand, so we are wasting our time if we test against this one value.
 
@@ -159,7 +160,7 @@ The sampling distribution is central to null hypothesis significance testing and
 
 The sampling distribution, however, does not play a role in a Bayesian approach. In the latter approach, we are estimating probabilities of population values, not probabilities of samples. As a consequence, we do not care about requirements for approximating the sampling distribution with a theoretical probability distribution. The probability distribution resulting from a Bayesian analysis can have any shape.
 
-This freedom comes at a cost. In Bayesian analysis, the researcher has to specify a probability distribution for each population value that is to be estimated. This probability distribution is called the _prior distribution_. The sample data update the prior distribution into the _posterior distribution_, which is the probability distribution that the researcher interprets and reports. A Bayesian approach, then, comes with a different type of distributional assumptions, namely the choice of prior distributions.
+This freedom comes at a cost. In Bayesian analysis, the researcher has to specify a probability distribution for each population value that is to be estimated. This probability distribution is called the _prior distribution_. The sample data update the prior distribution into the _posterior distribution_, which is the probability distribution that the researcher interprets and reports. Thus, Bayesian estimation learns from the data whereas a frequentist approach does not. But we have to provide prior distributions as a starting point for the learning process. A Bayesian approach then, comes with a different type of distributional assumptions, namely the choice of prior distributions.
 
 How do we chose prior distributions? In the ideal case, the posterior distributions of previous research can be used as prior distributions in the analysis of new data. This is called an _informative prior distribution_. It represents more or less established knowledge about the statistic that we estimate, which should not change much if it is updated by the data in our new sample. This is a wonderful way of using existing information and accumulating knowledge.
 
@@ -167,7 +168,41 @@ If we do not have this type of information, we may resort to _weakly informative
 
 These prior distributions are called weakly informative because they are easily overridden by the sample data if the sample is not very small. As a consequence, the posterior distribution is usually hardly influenced by the choice of a prior distribution. A plot of a weakly informative prior distribution and the posterior distribution should show that the two are quite different. 
 
-It is relatively safe to chose a weakly informative prior distribution. Still, it is wise to check that the results do not change substantially if you change the prior settings (robustness check). For guidelines, see @depaoliImprovingTransparencyReplication2017], who recommend to compare with a model estimated from _uninformative prior distributions_, which more or less give equal prior probabilities to all possible values of the statistic in the population.
+It is relatively safe to chose a weakly informative prior distribution. Still, it is wise to check that the results do not change substantially if you change the prior settings (robustness check). For guidelines, see @depaoliImprovingTransparencyReplication2017], who recommend to compare with a model estimated from _uninformative prior distributions_, which gives equal prior probabilities to all possible values of the statistic in the population (Figure \@ref(fig:uninformativeprior)).
+
+```{r uninformativeprior, eval=TRUE, echo=FALSE, fig.asp=0.5, fig.pos='H', fig.cap="An uninformative prior (horizontal line), a weakly informative prior (t distribution with heavy tails), and the posterior distribution (histogram)."}
+# Illustrate the concept of a prior distributions.
+library(tidyverse)
+
+# Generate a distribution for a regression coefficient.
+set.seed(222)
+regcoef <- data.frame(estimate = rlnorm(20000, 0.05, 0.2) - 0.7,
+                      stringsAsFactors = FALSE)
+
+# Plot the distribution.
+ggplot(regcoef) +
+  #posterior (at the back)
+  geom_histogram(aes(x = estimate), fill = "lightblue",
+                 binwidth = 0.03,
+                 boundary = 0) +
+  #uninformative (uniform) prior
+  geom_segment(x = min(regcoef$estimate), xend = max(regcoef$estimate), y = 30, yend = 30) +
+  #weakly informative (t) distribution
+  stat_function(
+    #function for scaling distribution to be visible in plot
+    fun = function(x, df) {
+          dt(x = x, df = 15) * 20000 * 0.03
+        }
+     ) +
+   geom_text(aes(x = 0.35, y = 800, label = "posterior" )) +
+   geom_text(aes(x = 1.1, y = 200, label = "weakly informative prior" )) +
+   geom_text(aes(x = 0, y = 80, label = "uninformative prior" )) +
+   scale_x_continuous(name = "Regression coefficient in the population",
+                     breaks = c(0, round(median(regcoef$estimate), 2), 0.5, 1.0, 1.5)) +
+   scale_y_continuous(name = "",
+                     breaks = NULL, minor_breaks = NULL) +
+   theme_bw()
+```
 
 In addition, a Bayesian approach requires another type of check. The posterior distribution is usually estimated with an iterative (MCMC) algorithm. This algorithm requires many steps (iterations) to arrive at a stable level of the parameter estimate. This phase is called the burn-in or warm-up phase. The algorithm is said to have converged when the estimates stabilize within a fixed range. When convergence has been achieved, an additional set of steps is required to find and count the values that the parameter estimate can take. 
 
@@ -181,7 +216,7 @@ Much work has be done and is still being done to develop safe weakly informative
 
 As stated in the preceding section, the prior distribution brings our prior knowledge to bear in the estimation process. This knowledge can be quite superficial, for example, we just know that very large effects are impossible or highly unlikely, so we specify a weakly informative prior distribution. Why would we want to take quite superficial prior knowledge as our starting point?
 
-A very practical reason for including this knowledge is that it helps the estimation algorithm. The prior information nudges the estimation algorithm in a plausible direction---even if it is not necessarily the right direction---so estimation will converge more easily and more quickly. For relatively simple models, this nudge hardly makes a difference, but complicated models, such as multilevel models with random intercepts and random slopes, can sometimes only be estimated with the help of these nudges.
+A very practical reason for including even superficial prior knowledge is that it helps the estimation algorithm. The prior information nudges the estimation algorithm in a plausible direction---even if it is not necessarily the right direction---so estimation will converge more easily and more quickly. For relatively simple models, this nudge hardly makes a difference, but complicated models, such as multilevel models with random intercepts and random slopes, can sometimes only be estimated with this kind of help.
 
 ## Precautions against overfitting the sample data
 
@@ -189,17 +224,17 @@ A focus on statistical significance is at the expense of attention to model fit:
 
 Traditional frequentist statistics gives us the point estimate that fits the current sample best. For example, we get the value of the regression coefficient that best predicts the dependent variable scores from the independent variable cores in our sample. Another sample will most probably be different, so our current regression coefficient estimate will not be the best fitting estimate for the new sample. It is overfitted to our current sample.
 
-The problem of overfitting a model to the data increases if the model becomes more complex. Every additional predictor adds to overfitting the model to the sample. The more complicated the model, the higher the risk of overfitting the model to the sample at hand. More complicated models, however, are more realistic because empirical reality tends to be complex. We end up with a conundrum, which is known as the bias-variance trade-off [@JamesIntroductionStatisticalLearning2017: 34-5]: We value realistic, hence complex models (little bias) but we also value replication, which is compromised by overfitting the model to the current sample (variance).
+The problem of overfitting a model to the data increases if the model becomes more complex. Every additional predictor adds to overfitting the model to the sample. The more complicated the model, the higher the risk of overfitting the model to the sample at hand. More complicated models, however, are more realistic because empirical reality tends to be complex. We end up with a conundrum, which is known as the bias-variance trade-off [@JamesIntroductionStatisticalLearning2017: 34-5]. We value realistic, hence complex models (little bias) but we also value replication, which is compromised by overfitting the model to the current sample (variance).
 
 How can we identify and correct for overfitting? It is important to realize that p values are not related to the probability that results will replicate [e.g., see @carverCaseStatisticalSignificance1978: 385-6]. Adjusted _R_^2^ for a regression model downsizes the proportion of variance predicted ("explained") by the model in proportion to the number of predictors used, but the estimated regression coefficients are still overfitted to the sample data.
 
-We need another way to tell us the probability that our results will replicate. The best option is to actually replicate our study. If sufficient data are at hand, a split-half approach can be used, which fits a model to the first half of the data (training set) and then tests it against the second half of the data by calculating how well the fitted model predicts the dependent variable in the test set (validation set). With insufficient data for a split-half approach or if we do not want to ignore half of the information when fitting and validating the model, resampling techniques can be used. These techniques repeatedly sample from the original sample and fit the model to each new sample (cross-validation), for instance, leave one randomly chosen observation out or leave out a randomly selected subset of observations (k-fold cross-validation) [@efronComputerAgeStatistical2016: 213ff].
+We need another way to tell us the probability that our results will replicate. The best option is to actually replicate our study. If sufficient data are at hand, a split-half approach can be used, which fits a model to the first half of the data (training set) and then tests it against the second half of the data by calculating how well the fitted model predicts the dependent variable in the test set (validation set). With insufficient data for a split-half approach or if we do not want to ignore half of the information when fitting and validating the model, resampling techniques can be used. These techniques repeatedly sample from the original sample and fit the model to each new sample (cross-validation), for instance, leave one randomly chosen observation out (leave-one-out cross-validation) or leave out a randomly selected subset of observations (k-fold cross-validation) [@efronComputerAgeStatistical2016: 213ff].
 
 A Bayesian approach estimates a probability distribution (posterior) for a population value, not the single value produced in a frequentist approach. If we use the posterior distribution to predict outcomes in a new or re-sampled data set, the predictions will generally be better than using the point estimate obtained in a frequentist approach. There are additional techniques for reducing overfitting in a Bayesian approach, some of which are briefly discussed in the next section.
 
 # How Can I Use A Bayesian Approach? {#usebayesian}
 
-Statistical software for Bayesian analysis is increasingly available. For example, Bayesian alternatives to many types of statistical models are available as R packages; consult the task view [Bayesian](https://cran.r-project.org/web/views/Bayesian.html) or search for "Bayes" in other [task views](https://cran.r-project.org/web/views/). 
+Statistical software for Bayesian analysis is increasingly available. Recent versions of SPSS offer Bayesian analyses (*Bayesian Statistics* in the *Analyze* menu). Bayesian alternatives to many types of statistical models are available as R packages; consult the task view [Bayesian](https://cran.r-project.org/web/views/Bayesian.html) or search for "Bayes" in other [task views](https://cran.r-project.org/web/views/). 
 
 Here, I focus on two software packages for Bayesian analysis: a menu-driven software package (_JASP_) with a work-flow like SPSS for the most common statistical models and a command-driven R package (`rstanarm`), which is very good at estimating complicated models, such as non-linear multilevel models. The two software packages represent two different Bayesian approaches: a focus on null hypothesis testing versus a focus on parameter estimation [@kruschkeBayesianAssessmentNull2011].
 
@@ -213,9 +248,9 @@ include_graphics("JASP.png")
 
 Traditional (frequentist) estimation is available for all standard tests (t tests, ANOVA, regression, chi-squared tests) as well as more advanced tests, namely, MANOVA, repeated measurements ANOVA, exploratory factor analysis, confirmatory factor analysis for one factor, SEM (provided that you can specify the model in [lavaan](http://lavaan.ugent.be/) syntax), meta analysis, and basic network analysis. Note that the SEM menu has a separate entry for parallel mediation models, which does not require writing syntax. It has an option to draw the mediation model, although this figure does not include the estimate of the indirect effect. 
 
-At the time of writing this text (November 2019), a Bayesian approach is mainly available for comparing group averages, for example, using data from experiments. JASP offers Bayesian analysis for t tests on one or two means, ANOVA, Repeated measures ANOVA, and ANCOVA. In addition, Bayesian estimation is available for correlations and for linear regression but not for regression models with dichotomous or categorical predictors (although the beta-version _BAIN_ module can compare models with categorical predictors). Finally, binomial and multinomial tests, contingency tables, and log-linear models can be executed in a Bayesian way.
+At the time of writing this text (November 2019), a Bayesian approach is mainly available for comparing group averages, for example, using data from experiments. JASP offers Bayesian analysis for t tests on one or two means, ANOVA, Repeated measures ANOVA, and ANCOVA. In addition, Bayesian estimation is available for correlations and for linear regression but not for regression models with dichotomous or categorical predictors (although the beta-version _BAIN_ module can compare models with categorical predictors). Finally, binomial and multinomial tests, contingency tables, and log-linear models can be executed in a Bayesian way. This is basically the range of models for which SPSS also offers Bayesian analyses.
 
-JASP's Bayesian approach focuses on _Bayes factors_. A Bayes factor quantifies the support in the sample for one model in comparison to another model. The more a model is supported rather than the other model, the more evidence we have for the former model. Model comparison with Bayse factors takes into account the model complexity as a guard against overfitting the model to the sample data [@kassBayesFactors1995]. Rules of thumb have been developed for interpreting Bayes factor values as strength of the evidence in favor of a model. Check out the [Wikipedia page on the Bayes factor](https://en.wikipedia.org/wiki/Bayes_factor#Interpretation) for rules of thumb.
+JASP's Bayesian approach focuses on _Bayes factors_. A Bayes factor quantifies the support in the sample for one model in comparison to another model. The more a model is supported rather than the other model, the more evidence we have for the former model. Model comparison with Bayes factors takes into account the model complexity as a guard against overfitting the model to the sample data [@kassBayesFactors1995]. Rules of thumb have been developed for interpreting Bayes factor values as strength of the evidence in favor of a model. Check out the [Wikipedia page on the Bayes factor](https://en.wikipedia.org/wiki/Bayes_factor#Interpretation) for rules of thumb.
 
 One of the two models that are compared is usually the model of no effect representing the null hypothesis. Thus, Bayes factors offer an alternative to traditional null hypothesis significance tests. A Bayes factor gives us a value expressing how much better the model allowing for an effect (H~1~) is supported than the model of the null hypothesis (indicated by _BF~10~_ in JASP output). At the same time, however, we can see how much better the null hypothesis is supported by the data (_BF~01~_ in JASP output). In Figure \@ref(fig:JASPscreenshot), the null hypothesis of equal population averages is more strongly supported by the data than the alternative hypothesis. In contrast, a null hypothesis significance test only tells us whether or not we should reject the null hypothesis. It doesn't provide us with evidence to accept it.
 
@@ -227,7 +262,7 @@ The other Bayesian approach focuses on parameter estimation, modelling, and pred
 
 The focus here is on the  R [`rstanarm` package](http://mc-stan.org/rstanarm/index.html) for Bayesian applied regression modelling [@R-rstanarm] and some auxiliary packages. This package was developed by Andrew Gelman's team at Columbia University. It combines the power of the stan modelling language with the ease of applying regression models offered by R packages such as `lme4` [@R-lme4]. In other words, you can run a Bayesian regression model with syntax that is not more complicated than running the same regression model in a frequentist approach. But yes, you have to work with R.
 
-Let us illustrate how to apply Bayesian regression models using `rstanarm`. Consult [@TQMP14-2-99] for a more detailed step-by-step tutorial. Our example data concern students in a US dormitory [@MadanSocialsensingepidemiological2010], who submitted daily health reports including their sadness status (sad versus not sad, variable `sad.depressed`) during a few months. The data set can be downloaded [here](https://wdenooy.github.io/Switch2Bayesian/sadness.csv). We will try to predict their sadness status from the (logarithm of the) number of contacts with sad friends within the dormitory using spatial contacts (variable `prox_24_friend`) and mediated contacts (variable `media_24_friend`) in the 24 hours preceding health report submission. We control for the student's sadness status on the previous day (variable `prev_sad`). Does sadness spread via contacts and communication?
+Let us illustrate how to apply Bayesian regression models using `rstanarm`. Consult Muth et al. [-@TQMP14-2-99] for a more detailed step-by-step tutorial. Our example data concern students in a US dormitory [@MadanSocialsensingepidemiological2010], who submitted daily health reports including their sadness status (sad versus not sad, variable `sad.depressed`) during a few months. The data set can be downloaded [here](https://wdenooy.github.io/Switch2Bayesian/sadness.csv). We will try to predict their sadness status from the (logarithm of the) number of contacts with sad friends within the dormitory using spatial contacts (variable `prox_24_friend`) and mediated contacts (variable `media_24_friend`) in the 24 hours preceding health report submission. We control for the student's sadness status on the previous day (variable `prev_sad`). Does sadness spread via contacts and communication?
 
 ### Estimation
 
@@ -389,7 +424,7 @@ posterior_model3 <- posterior_model3 %>%
   )
 ```
 
-The posterior distribution of a parameter is just the column of this parameter in the list described above. The results presented by `shinystan` (Section \@ref(checks)) calculate the median (or mean) as point estimate and the 2.5 and 97.5 percentiles as limits of the credible interval. It is easy to calculate the probability that a regression coefficient is larger than a particular value, for example, that the effect of mediated exposure to sad friends is larger than zero:
+The posterior distribution of a parameter is just the column of this parameter in the list described above. The results presented by `shinystan` (Section \@ref(checks)) calculate the median (or mean) as point estimate and the 2.5 and 97.5 percentiles as limits of the credible interval. It is easy to test any hypothesis with the posterior distribution: Just calculate the probability that a regression coefficient is larger than a particular value or within a particulare range. The probability that the effect of mediated exposure to sad friends is larger than zero, for example, is calculated thus:
 
 ```{r eval=FALSE, echo=TRUE}
 mean(posterior_model3$`log(media_24_friend + 1)` > 0)
@@ -540,7 +575,7 @@ Table \@ref(tab:modelcomparison2) shows the weights for the three models [@YaoUs
 
 # Conclusion
 
-Bayesian analyses are flexible and they provide results that are intuitive.
+Bayesian analyses are flexible and they provide results that are intuitive and helpful. What else needs to be said?
 
 \newpage
 
