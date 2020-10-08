@@ -34,13 +34,13 @@ draft             : no
 documentclass     : "apa6"
 classoption       : "doc" #Other options: "jou" (journal format), "man" (manuscript format)
 output            : 
-  papaja::apa6_pdf: 
-    toc: no         #no table of contents
-    number_sections: true #number sections (for referencing)
   bookdown::html_document2: #additional HTML output option
     toc: yes        #with a table of contents
     toc_depth: 3    #using three levels
     toc_float: yes  #which is situated in the left margin
+  papaja::apa6_pdf: 
+    toc: no         #no table of contents
+    number_sections: true #number sections (for referencing)
   papaja::apa6_word:
     toc: no         #no table of contents
 geometry: 
@@ -238,9 +238,9 @@ Statistical software for Bayesian analysis is increasingly available. Recent ver
 
 Here, I focus on two software packages for Bayesian analysis: a menu-driven software package (_JASP_) with a work-flow like SPSS for the most common statistical models and a command-driven R package (`rstanarm`), which is very good at estimating complicated models, such as non-linear multilevel models. The two software packages represent two different Bayesian approaches: a focus on null hypothesis testing versus a focus on parameter estimation [@kruschkeBayesianAssessmentNull2011].
 
-## JASP
+## JASP or jamovi
 
-[JASP](https://jasp-stats.org/) is free statistical software developed and maintained at the University of Amsterdam by Eric-Jan Wagenmakers. It offers an SPSS-like interface featuring both traditional frequentist analyses and Bayesian analyses. In contrast to SPSS, the output is very much like a real document, which can be edited, so the user can add comments, interpretations, and conclusions. If you open a data set, the last saved output document is also opened. Results tables are formatted in APA style and they can be copied and pasted into Word or LaTeX documents. Figures can be copied and exported and, finally, there are provisions for interacting with the Open Science Framework. It takes very little time to learn using this interface if you are used to SPSS.
+[JASP](https://jasp-stats.org/) and [jamovi](https://www.jamovi.org/) is free statistical software offering an SPSS-like interface featuring both traditional frequentist analyses and Bayesian analyses. In contrast to SPSS, the output is very much like a real document, which can be edited, so the user can add comments, interpretations, and conclusions. If you open a data set, the last saved output document is also opened. Results tables are formatted in APA style and they can be copied and pasted into Word or LaTeX documents. Figures can be copied and exported and, finally, there are provisions for interacting with the Open Science Framework. It takes very little time to learn using this interface if you are used to SPSS.
 
 ```{r JASPscreenshot, out.width='100%', fig.pos='H', fig.cap="Annotated (red) screen shot of the JASP interface after executing a Bayesian and a traditional independent-samples t test."}
 include_graphics("JASP.png")
@@ -250,7 +250,7 @@ Traditional (frequentist) estimation is available for all standard tests (t test
 
 At the time of writing this text (November 2019), a Bayesian approach is mainly available for comparing group averages, for example, using data from experiments. JASP offers Bayesian analysis for t tests on one or two means, ANOVA, Repeated measures ANOVA, and ANCOVA. In addition, Bayesian estimation is available for correlations and for linear regression but not for regression models with dichotomous or categorical predictors (although the beta-version _BAIN_ module can compare models with categorical predictors). Finally, binomial and multinomial tests, contingency tables, and log-linear models can be executed in a Bayesian way. This is basically the range of models for which SPSS also offers Bayesian analyses.
 
-JASP's Bayesian approach focuses on _Bayes factors_. A Bayes factor quantifies the support in the sample for one model in comparison to another model. The more a model is supported rather than the other model, the more evidence we have for the former model. Model comparison with Bayes factors takes into account the model complexity as a guard against overfitting the model to the sample data [@kassBayesFactors1995]. Rules of thumb have been developed for interpreting Bayes factor values as strength of the evidence in favor of a model. Check out the [Wikipedia page on the Bayes factor](https://en.wikipedia.org/wiki/Bayes_factor#Interpretation) for rules of thumb.
+JASP's Bayesian approach focuses on _Bayes factors_. For a gentle introduction to Bayesian statistics and the Bayes factor, read [@kurtBayesianStatisticsFun2019]. A Bayes factor quantifies the support in the sample for one model in comparison to another model. The more a model is supported rather than the other model, the more evidence we have for the former model. Model comparison with Bayes factors takes into account the model complexity as a guard against overfitting the model to the sample data [@kassBayesFactors1995]. Rules of thumb have been developed for interpreting Bayes factor values as strength of the evidence in favor of a model. Check out the [Wikipedia page on the Bayes factor](https://en.wikipedia.org/wiki/Bayes_factor#Interpretation) for rules of thumb.
 
 One of the two models that are compared is usually the model of no effect representing the null hypothesis. Thus, Bayes factors offer an alternative to traditional null hypothesis significance tests. A Bayes factor gives us a value expressing how much better the model allowing for an effect (H~1~) is supported than the model of the null hypothesis (indicated by _BF~10~_ in JASP output). At the same time, however, we can see how much better the null hypothesis is supported by the data (_BF~01~_ in JASP output). In Figure \@ref(fig:JASPscreenshot), the null hypothesis of equal population averages is more strongly supported by the data than the alternative hypothesis. In contrast, a null hypothesis significance test only tells us whether or not we should reject the null hypothesis. It doesn't provide us with evidence to accept it.
 
